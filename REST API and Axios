@@ -1,0 +1,288 @@
+1.REST API integration patterns:-
+Rest stands for Representational State Transfer – the acronym is a combination of the first one or two letters from these three words. 
+This is the simplest and most popular form of a request-response integration.
+REST APIs use a stateless, client-server communication model, wherein each message contains all the information necessary to understand and process the message.
+REST is all about resources. Resources are entities that the API exposes, which can be accessed and manipulated using URL paths.
+To understand REST APIs, consider the following analogy. Imagine you go into a restaurant to order some food. The menu is extensive and items are categorically organised. 
+Each item on the menu can be equated to a resource.
+REST API integration can follow several established patterns depending on system architecture, scalability needs, and coupling requirements. Below are the most common 
+REST API integration patterns, grouped by architectural style and integration purpose.
+1. Point-to-Point Integration
+2. API Gateway Pattern
+3. Backend-for-Frontend (BFF)
+4. Service Mesh Pattern
+5. Event-Driven Integration (REST + Events)
+6. Aggregator Pattern
+
+2.Axios interceptors:-
+Axios interceptors are functions that run before a request is sent or before a response is handled.
+Think of them as middleware for HTTP calls. They let you globally control and modify requests and responses without repeating logic in every API call.
+Axios interceptors are the default configurations that are added automatically to every request or response that a user receives. It is useful to check 
+response status code for every response that is being received.
+Interceptors are functions that sit between your application and the actual network call. They allow you to hook into Axios’s request/response lifecycle 
+and modify the request before it’s sent or the response before it’s processed.
+Request Interceptors – executed before the request is sent.
+Response Interceptors – executed after a response is received (or an error occurs).
+
+3.Global error boundaries:-
+Error barriers are additives that catch mistakes at some stage in rendering, in lifecycle methods, and in constructors of their entire toddler thing tree. 
+They log the errors and show a fallback UI to save you the complete software from crashing.
+Error boundaries are React components that catch errors during rendering, in constructors, lifecycle methods, and within child components. They prevent the entire 
+React application from crashing due to errors in specific components.
+-Catches Errors: Catches errors during rendering, lifecycle methods, and in child components.
+-Prevents Crashes: Avoids the app from crashing entirely due to errors in isolated parts of the UI.
+-Fallback UI: Displays an alternative UI when errors occur.
+-Logs Errors: Useful for logging errors to external services for debugging.
+
+4.Debouncing & throttling API calls:-
+Debouncing and throttling are both strategies to control the rate at which a function is executed in response to repeated events, such as user input.
+-Debouncing:-
+Debouncing ensures that a function is only called after a certain amount of time has passed since the last invocation, effectively delaying the execution until the user stops typing.
+Debouncing in JavaScript can be defined as the technique that is used to limit the number of times a function gets executed. Debouncing is useful when the event is frequently being 
+triggered in a short interval of time like typing, scrolling, and resizing.
+Limit Function Calls: During frequent events like typing, resizing, or scrolling debouncing prevents the frequent function calls.
+Delays Execution: After the specific delay only the function is executed, ensuring no rapid consecutive calls.
+Prevents Overload: Efficiently managing high-frequency triggers helps in preventing overloading.
+-Throttling:-
+Throttling limits the frequency of function calls to a specified interval, ensuring that the function is not invoked more than once during the interval.
+Throttling is a technique used to limit the number of times a function can be executed in a given time frame. It’s extremely useful when dealing with 
+performance-heavy operations, such as resizing the window or scrolling events, where repeated triggers can lead to performance issues.
+example:-
+function throttle(fn, delay) {
+    let lastTime = 0;
+    return function (...args) {
+        let now = Date.now();
+        if (now - lastTime >= delay) {
+            fn.apply(this, args);
+            lastTime = now;
+        }
+    };
+}
+
+5.React Query fundamentals:-
+TanStack Query (FKA React Query) is often described as the missing data-fetching library for web applications, but in more technical terms, it makes fetching, 
+caching, synchronizing and updating server state in your web applications a breeze.
+React Query fundamentals in this hands-on guide. Master useQuery, useMutation, caching strategies, and synchronization with TanStack Query v5+ for modern React data management.
+Unlike traditional state management solutions like Redux, React Query is specifically designed for managing server state, data that originates from an external source and needs to be kept in sync.
+Before React Query, developers had to manually handle loading states, error states, caching, background updates, and stale data. This often led to complex, error-prone code scattered across components. 
+React Query provides a declarative approach that handles all of this automatically.
+Benefits of React Query:
+1.Automatic Caching - React Query caches your data automatically. When you request the same data again, it returns the cached version instantly while refetching in the background.
+2.Background Updates - Data is automatically refetched in the background when it becomes stale, when the window regains focus, or when the network reconnects.
+3.Deduplication - Multiple components requesting the same data result in only one network request. React Query shares the result across all subscribers.
+4.Optimistic Updates - Update your UI immediately before the server confirms the change, providing a snappy user experience.
+5.Pagination and Infinite Scroll - Built-in support for paginated and infinite scroll interfaces with minimal code.
+
+6.Build Axios instance with interceptors:-
+7.Integrate Hospital API for patient list:-
+//App.js
+import PatientList from "./components/PatientList";
+
+function App() {
+  return (
+    <div>
+      <h1> Hospital Patient List</h1>
+      <PatientList />
+    </div>
+  );
+}
+
+export default App;
+//api/axiosInstance.js
+import axios from "axios";
+
+const axiosInstance = axios.create({
+  baseURL: "http://localhost:5000",
+
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+export default axiosInstance;
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    console.log("Request:", config);
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+axiosInstance.interceptors.response.use(
+  (response) => {
+    console.log("Response:", response);
+    return response;
+  },
+  (error) => {
+    if (error.response) {
+      if (error.response.status === 401) {
+        alert("Unauthorized! Please login again.");
+        localStorage.removeItem("token");
+      }
+
+      if (error.response.status === 500) {
+        alert("Server error!");
+      }
+    } else {
+      alert("Network error!");
+    }
+
+    return Promise.reject(error);
+  }
+);
+//components/PatientList.js
+import React, { useEffect, useState } from "react";
+import { getPatients } from "../services/patientService";
+
+const PatientList = () => {
+  const [patients, setPatients] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const response = await getPatients();
+    console.log ("API DATA:", response.data);
+    setPatients(response.data);
+  };
+
+  return (
+    <div>
+      <h2> Patient List: </h2>
+      {patients.map((p) => (
+        <div key={p.id}>{p.name}</div>
+      ))}
+    </div>
+  );
+};
+
+export default PatientList;
+//service/patientService.js
+import axiosInstance from "../api/axiosInstance";
+
+export const getPatients = () => 
+  axiosInstance.get("/patients");
+
+export const addPatient = (data) =>
+  axiosInstance.post("/patients", data);
+
+export const updatePatient = (id, data) =>
+  axiosInstance.put(`/patients/${id}`, data);
+
+export const deletePatient = (id) =>
+  axiosInstance.delete(`/patients/${id}`);
+
+8.Add React Query caching for fast UI updates:-
+//App.jsx
+import { useQuery } from "@tanstack/react-query";
+import { useTodos } from "./hooks";
+
+export default function App() {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const res = await fetch(
+        "http://localhost:5000/patients"
+      );
+
+      if (!res.ok) {
+        throw new Error("Network error");
+      }
+
+      return res.json();
+    },
+  });
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error loading data</p>;
+
+  return (
+    <div>
+      <h2>React Query Working</h2>
+      <ul>
+        {data.map((user) => (
+          <li key={user.id}>{user.name}<br/> {user.gender} <br/> {user.age}</li>
+        ))}
+      </ul>
+       <button> Refresh</button>
+    </div>
+  );
+}
+//main.jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import App from "./App";
+
+const queryClient = new QueryClient();
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  </React.StrictMode>
+);
+//api.js
+const API_URL = "http://localhost:5000/patients";
+
+export const fetchTodos = async () => {
+  const res = await fetch(API_URL);
+  if (!res.ok) throw new Error("Error fetching todos");
+  return res.json();
+};
+
+export const createTodo = async (todo) => {
+  return { id: Date.now(), ...todo }; 
+};
+//hooks.js
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchTodos, createTodo } from "./api";
+
+export const useTodos = () => {
+  const queryClient = useQueryClient();
+
+  const query = useQuery({
+    queryKey: ["todos"],
+    queryFn: fetchTodos,
+    staleTime: 1000 * 60 * 5, 
+  });
+
+  const mutation = useMutation({
+    mutationFn: createTodo,
+
+    onMutate: async (newTodo) => {
+      await queryClient.cancelQueries({ queryKey: ["todos"] });
+
+      const previous = queryClient.getQueryData(["todos"]);
+
+      queryClient.setQueryData(["todos"], (old = []) => [
+        ...old,
+        { id: Date.now(), ...newTodo },
+      ]);
+
+      return { previous };
+    },
+
+    onError: (err, newTodo, context) => {
+      queryClient.setQueryData(["todos"], context.previous);
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
+
+  return {
+    ...query,
+    addTodo: mutation.mutate,
+  };
+};
+
