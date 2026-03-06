@@ -1,0 +1,271 @@
+1.CSS variables & theming:-
+-CSS variables allow you to store values for reuse across your stylesheets. You can think of them as placeholders that can be updated in one spot but reflected throughout your entire CSS file.
+CSS variables, also known as custom properties, are entities defined by CSS authors that contain specific values to be reused throughout a document. 
+They begin with two hyphens (--) followed by a name and can be used within any CSS property value.
+Let's take a look at how CSS variables are declared:
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+}
+In this example, we've defined two CSS variables, --primary-color and --secondary-color, with their respective values.
+
+-When building applications that require multiple themes (like light and dark modes), CSS variables shine. Instead of hardcoding colors or font sizes throughout your stylesheet, you can store 
+these values in variables and switch themes by changing the values dynamically.
+Let’s dive into some key reasons why CSS variables make theme
+customisation more manageable:
+Consistency Across Components: By using variables, your UI components will remain consistent. When you need to update a theme color or font size, you only need to adjust it at a single place.
+Dynamic Theme Switching: You can easily switch themes with JavaScript by updating the CSS variable values on the fly, allowing for real-time theme changes without the need for page reloads.
+Easier Maintenance: Updating a design system is much easier when variables are used. For example, if you need to tweak the primary color, you only change it in one place, and the change 
+will propagate throughout the entire site.
+
+2.Responsive design units: vw, vh, rem, em:-
+-vw (viewport width):
+Relative to 1% of the viewport's width. If you set an element's width to 50vw, it will take up half of the viewport’s width, no matter what device or screen size is being used.
+-vh (viewport height):
+Relative to 1% of the viewport's height. For example, 100vh would be the full height of the browser window.
+-rem (root em):
+Similar to em, but instead of the parent’s font size, rem is relative to the root element (<html>). Typically, 1rem is set to 16px by default in most browsers.
+The rem unit is relative to the root element (usually the <html> element) font-size, making it consistent across the entire document.
+-em:
+This unit is relative to the font size of the parent element. If a parent has a font size of 16px, then 1em equals 16px. So, 2em would be 32px.
+The em unit is relative to the font-size of the element it is used on. For example, 2em means two times the size of the current font.
+example of Relative Unit:-
+div {
+  width: 50%;
+  font-size: 2em;
+}
+
+3.Media queries architecture:-
+The CSS Media Query gives you a way to apply CSS only when the browser and device environment matches a rule that you specify, for example "viewport is wider than 480 pixels". 
+Media queries are a key part of responsive web design, as they allow you to create different layouts depending on the size of the viewport, but 
+they can also be used to detect other things about the environment your site is running on, for example whether the user is using a touchscreen rather than a mouse.
+Media Queries is a CSS3 feature that makes a website page adapt its layout to different screen sizes and media types. Media queries are CSS rules that apply specific styles based 
+on the characteristics of the user's device or viewport. These characteristics can include screen width, height, orientation, resolution, and more.
+Example:
+@media (max-width: 768px) {
+  body {
+    background-color: lightblue;
+  }
+}
+
+4.Dark mode implementation patterns:-
+Dark mode design is a user interface approach that uses dark color schemes instead of traditional light backgrounds, featuring dark surfaces, light text, 
+and carefully calibrated accent colors. This design pattern reduces eye strain in low-light environments, saves battery life on OLED displays, and provides 
+users with visual customization options.
+Dark Mode Implementation:
+-Reduced Eye Strain: Dark interfaces decrease visual fatigue during extended use by 60%.
+-Better Battery Life: OLED displays consume 40% less power with dark pixels.
+-Enhanced Focus: Dark backgrounds help users focus on content and reduce distractions.
+-Accessibility Improvement: Benefits users with light sensitivity and certain visual conditions.
+-Modern User Expectations: 70% of users expect dark mode options in applications.
+
+5.Accessibility contrast considerations:-
+Color contrast ensures that text and visual elements are easily readable for everyone, including people with visual impairments or color blindness. 
+It helps users navigate, understand, and interact with content effectively, regardless of their abilities or the device they’re using.
+Here are the reasons why color contrast is important for accessibility:
+-Improves readability for users with low vision or color blindness
+-Ensures text stands out clearly against background elements
+-Supports compliance with WCAG accessibility standards
+-Enhances usability in bright or low-light conditions
+-Reduces eye strain for all users
+-Creates inclusive and user-friendly design for broader audiences.
+
+6.Make dashboard fully responsive:-
+//index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Responsive Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <header class="navbar">
+        <h2>Hospital Dashboard</h2>
+    </header>
+
+    <aside class="sidebar">
+        <ul>
+          <li>☰</li>
+            <li>Dashboard</li>
+            <li>Patients</li>
+            <li>Doctors</li>
+            <li>Appointments</li>
+            <li>Reports</li>
+        </ul>
+    </aside>
+
+    <main class="content">
+
+        <div class="cards">
+            <div class="card">Total Patients</div>
+            <div class="card">Doctors</div>
+            <div class="card">Appointments</div>
+            <div class="card">Revenue</div>
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
+
+//style.css
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+.dashboard{
+display:grid;
+grid-template-columns:220px 1fr;
+grid-template-rows:60px 1fr;
+grid-template-areas:
+"sidebar navbar"
+"sidebar content";
+min-height:100vh;
+}
+
+.navbar{
+grid-area:navbar;
+background:purple;
+color:white;
+display:flex;
+align-items:center;
+padding-left:20px;
+}
+
+.sidebar{
+grid-area:sidebar;
+background:#3498db;
+color:white;
+padding:20px;
+}
+
+.sidebar ul{
+list-style:none;
+}
+
+.sidebar li{
+padding:12px 0;
+}
+
+.content{
+grid-area:content;
+padding:20px;
+background:#f4f6f8;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+padding:40px;
+text-align:center;
+border-radius:8px;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+@media(max-width:768px){
+
+.dashboard{
+grid-template-columns:1fr;
+grid-template-rows:60px auto auto;
+grid-template-areas:
+"navbar"
+"sidebar"
+"content";
+}
+
+.sidebar{
+text-align:center;
+}
+
+}
+
+
+7.Implement theme switch (light/dark):-
+//index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Switch Theme</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Hello Developer</h1>
+  <br/>
+  <p>Welcome To My Page</p>
+<p>This is a simple theme switch example.</p>
+
+<button onclick="toggleTheme()">Switch Theme</button>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+
+//script.js
+function toggleTheme(){
+
+const body = document.body;
+
+body.classList.toggle("dark");
+
+}
+
+//style.css
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+background:#ffffff;
+color:#222;
+transition:0.3s;
+}
+
+.container{
+padding:40px;
+text-align:center;
+}
+
+button{
+margin-top:20px;
+padding:10px 20px;
+border:none;
+background:brown;
+color:white;
+cursor:pointer;
+border-radius:5px;
+}
+
+body.dark{
+background:#1e1e1e;
+color:white;
+}
+
+body.dark button{
+background:#555;
+}
