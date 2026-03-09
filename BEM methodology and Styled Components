@@ -1,0 +1,329 @@
+1.BEM methodology for scalable CSS:-
+BEM (Block Element Modifier) is a CSS naming methodology that helps create reusable, maintainable, and scalable stylesheets. It's one of the most popular CSS 
+architecture patterns used in modern web development.
+The BEM Structure
+BEM follows a specific naming convention with three main components:
+-Block: A standalone component that is meaningful on its own
+Example: header, menu, button, card
+-Element: A part of a block that has no standalone meaning and is semantically tied to its block
+Named using double underscores: block__element
+Example: menu__item, card__title, button__icon
+-Modifier: A flag on a block or element that changes appearance, behavior, or state
+Named using double hyphens: block--modifier or block__element--modifier
+Example: button--large, menu__item--active, card--featured 
+
+2.Atomic CSS & utility-first design:-
+-Atomic design is a methodology for crafting design systems that divides components into smaller building blocks, which can be combined to create more complex 
+and reusable components. It was created by Brad Frost to help developers and designers work more efficiently and consistently across web applications.
+Atomic Design consists of five levels:
+Atoms: Basic building blocks like buttons, inputs, and labels.
+Molecules: Groups of atoms working together, such as a form with a label and an input.
+Organisms: More complex components formed by groups of molecules, such as a navigation bar or a product card.
+Templates: Page structures consisting of organisms, defining the overall layout.
+Pages: Specific instances of templates filled with real content.
+-Utility-first CSS is a design methodology that focuses on using small, single-purpose utility classes in HTML markup rather than writing custom CSS. These 
+classes are designed to do one thing (e.g., text-center, mt-4, bg-blue-500) and are often used together to compose the desired design of a component or layout directly in the HTML file.
+In traditional CSS, you might define styles for a button or card in a separate .css file, creating rules for padding, background color, font size, and margins. In contrast, 
+with utility-first CSS, you’d combine multiple utility classes directly on the element in HTML to achieve.
+
+3.CSS Modules for component isolation:-
+CSS Modules provide locally scoped CSS by generating unique class names at build time, preventing global namespace collisions and enabling true component-level styling.
+Usually when creating microfrontend apps from scratch the best way to isolate their CSS is by avoiding global styles and by scoping them (manually or with a CSS-in-JS library) 
+or using CSS modules. This, however, is not always so easy especially if you are trying to break down an old monolithic app full of global CSS into micro apps or if you are dealing with 
+a library with global reboot rules such as Bootstrap. Then you will probably need a simpler way to cut off CSS from leaking between applications.
+CSS Modules provide component-level style isolation by generating unique class names during build time, preventing global CSS conflicts.
+//App.js
+import React from 'react';
+import styles from './styles.module.css';
+
+function App() {
+  return <button className={styles.button}>Button</button>;
+}
+
+export default App;
+//styles.module.css
+.button {
+  background-color: blue;
+  color: white;
+}
+
+4.Styled Components deep behavior:-
+Styled Components is a CSS-in-JS library that helps you write actual CSS syntax inside your JavaScript code. Each styled component is a React 
+component with its own encapsulated styles, ensuring there are no CSS class name conflicts.
+Key Features:
+Dynamic Styling: Styles can change based on component props.
+Scoped Styles: Styles are isolated to the component and don’t leak to other parts of the app.
+Theming: Supports theme-based styling for consistent design systems.
+No Class Name Bugs: Automatically generates unique class names for your styles.
+example:
+import styled from 'styled-components';
+
+const Button = styled.button`
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: #45a049;
+  }
+`;
+const App = () => {
+  return <Button>Click Me</Button>;
+};
+export default App;
+
+
+5.Emotion vs Styled Components differences:-
+Emotion when building performance-critical applications where runtime speed matters, projects requiring minimal bundle size overhead, applications using multiple frameworks 
+(React, Vue, or vanilla JS), TypeScript-first development environments, large-scale applications with thousands of components, projects needing both string and object style APIs, 
+or when you want flexibility between css prop and styled API. Ideal for design systems requiring maximum performance optimization.
+Emotion provides both styled and css APIs for writing CSS styles. It is known for its flexibility and performance optimizations, making it a popular choice in large applications.
+
+Styled Components when building React applications where developer experience is prioritized, teams are familiar with CSS syntax and prefer tagged template literals, projects 
+require extensive theming systems, you want a mature ecosystem with abundant community resources and third-party integrations, building component libraries that need familiar 
+CSS syntax, or when working with React Native alongside web applications. Perfect for rapid prototyping with intuitive styling patterns.
+Styled Components allows you to style your components using tagged template literals. It emphasizes a more “component-driven” styling approach, encapsulating all the CSS 
+logic within the component itself.
+
+6.Convert UI components to Styled Components:-
+//App.js
+import React from "react";
+import StudentCard from "./components/StudentCard/StudentCard";
+
+function App() {
+  return (
+    <div
+      style={{
+        padding: "40px",
+        background: "#f3f4f6",
+        height: "100vh",
+        margin: "40px",
+      }}
+    >
+      <h1>Student Details</h1>
+
+      <StudentCard />
+    </div>
+  );
+}
+
+export default App;
+
+//index.js
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
+//components/Button/Button.jsx
+import React from "react";
+import { StyledButton } from "./Button.styles";
+
+const Button = ({ text }) => {
+  return <StyledButton>{text}</StyledButton>;
+};
+
+export default Button;
+
+//components/Button/Button.styles.js
+import styled from "styled-components";
+
+export const StyledButton = styled.button`
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #1d4ed8;
+  }
+`;
+
+//components/StudentCard/StudentCard.jsx
+import React from "react";
+import { Card, StudentName, StudentInfo } from "./StudentCard.styles";
+import Button from "../Button/Button";
+
+const StudentCard = () => {
+  return (
+    <Card>
+      <StudentName>Gayatri Wasulkar</StudentName>
+      <StudentInfo>Course: Computer Science</StudentInfo>
+      <StudentInfo>Year: 3rd Year</StudentInfo>
+
+      <Button text="View Profile" />
+    </Card>
+  );
+};
+
+export default StudentCard;
+
+//components/StudentCard/StudentCard.styles.js
+import styled from "styled-components";
+
+export const Card = styled.div`
+  width: 300px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+`;
+
+export const StudentName = styled.h2`
+  color: #111827;
+`;
+
+export const StudentInfo = styled.p`
+  color: #6b7280;
+  margin-bottom: 15px;
+`;
+
+2nd example:-
+import styled from "styled-components";
+
+const FormContainer = styled.div`
+  width: 300px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+`;
+
+const Button = styled.button`
+  background: green;
+  color: white;
+  padding: 10px;
+  border: none;
+  width: 100%;
+`;
+
+function Login() {
+  return (
+    <FormContainer>
+      <h2>Login Form</h2>
+      <Input placeholder="Email" />
+      <Input placeholder="Password" type="password" />
+      <Button>Login</Button>
+    </FormContainer>
+  );
+}
+
+export default Login;
+
+7.Implement theme-based styling:-
+//App.js
+import React, { useState } from "react";
+import styled, { ThemeProvider } from "styled-components";
+import { lightTheme, darkTheme } from "./theme";
+
+const Card = styled.div`
+  background: ${(props) => props.theme.cardBg};
+  color: ${(props) => props.theme.textColor};
+  border: 1px solid gray;
+  padding: 50px;
+  width: 200px;
+  border-radius: 8px;
+  text-align: center;
+`;
+
+const Button = styled.button`
+  margin-top: 10px;
+  padding: 8px 12px;
+`;
+
+function App() {
+  const [darkMode, setDarkMode] = useState(false);
+
+  return (
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <Card>
+        <h2>Card Theme</h2>
+        <p>Theme Styling Example</p>
+
+        <Button onClick={() => setDarkMode(!darkMode)}>Change Theme</Button>
+      </Card>
+    </ThemeProvider>
+  );
+}
+
+export default App;
+
+//theme.js
+export const lightTheme = {
+  cardBg: "#ffffff",
+  textColor: "#000000",
+};
+
+export const darkTheme = {
+  cardBg: "#333333",
+  textColor: "#ffffff",
+};
+
+2nd example:-
+//App.js
+import React, { useState } from "react";
+import styled, { ThemeProvider } from "styled-components";
+import { lightTheme, darkTheme } from "./theme";
+
+const Card = styled.div`
+  background: ${(props) => props.theme.cardBg};
+  color: ${(props) => props.theme.textColor};
+  border: 4px solid gray;
+  margin: 40px auto;
+  padding: 50px;
+  width: 200px;
+  border-radius: 8px;
+  text-align: center;
+`;
+
+const Button = styled.button`
+  margin-top: 10px;
+  padding: 8px 12px;
+`;
+
+function App() {
+  const [darkMode, setDarkMode] = useState(false);
+
+  return (
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <Card>
+        <h2>School Details</h2>
+        <p>School Name: BJS High School</p>
+        <p>City: Pune</p>
+        <p>Students: 100</p>
+
+        <Button onClick={() => setDarkMode(!darkMode)}>
+          Change School Theme
+        </Button>
+      </Card>
+    </ThemeProvider>
+  );
+}
+
+export default App;
+
+//theme.js
+export const lightTheme = {
+  cardBg: "#ffffff",
+  textColor: "#000000",
+};
+
+export const darkTheme = {
+  cardBg: "#333333",
+  textColor: "#ffffff",
+};
+
+
