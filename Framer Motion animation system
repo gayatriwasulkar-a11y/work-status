@@ -1,0 +1,444 @@
+1.Framer Motion animation system:-
+Framer Motion is a modern animation library for React that allows developers to create smooth, natural, and production-ready animations with minimal code. It provides an 
+easy-to-use API, physics-based transitions, and powerful features like gesture support, layout animations, and exit animations, making it the go-to choice for animating 
+React applications.
+Features of react-motion
+Physics-based animations: Built-in spring animations for natural movements.
+Declarative API: Simple and intuitive syntax.
+Staggered Animations: Easily create coordinated animations.
+Exit/Enter Animations: Perfect for dynamic lists and page transitions.
+Actively Maintained: Works seamlessly with React 18 and Next.js.
+
+2.Variants, transitions, gestures:-
+Variants:-
+Variants are predefined animation states that define how a component should look in different stages of an animation.
+Example: hidden state, visible state, expanded state.
+const boxVariants = {
+  hidden: { opacity: 0, x: -100 },
+  visible: { opacity: 1, x: 0 }
+};
+
+<motion.div
+  variants={boxVariants}
+  initial="hidden"
+  animate="visible"
+/>
+
+Transitions:-
+Transitions define how the animation moves from one state to another, including the duration, delay, and animation type.
+Example: animation duration of 1 second or spring effect.
+<motion.div
+  animate={{ x: 200 }}
+  transition={{ duration: 1 }}
+/>
+
+Gestures:-
+Gestures are user interactions (like hover, click, tap, or drag) that trigger animations in a component.
+Example: button scaling when hovered or tapped.
+<motion.button
+  whileHover={{ scale: 1.2 }}
+  whileTap={{ scale: 0.9 }}
+>
+  Click Me
+</motion.button>
+
+3.Page transition design:-
+Page Transition Design refers to the visual animation that occurs when a user moves from one page or screen to another in a website or application. 
+These animations make navigation smoother and improve the overall user experience (UX).
+Page transitions are commonly implemented in modern web apps using animation libraries like Framer Motion or frameworks like React.
+Page Transition Design is the animation effect used when navigating from one page to another to create a smooth and visually engaging user experience.
+Example:-
+//App.js
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import About from "./About";
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
+
+//Home.js
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+
+function Home() {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <h1>Home Page</h1>
+      <Link to="/about">Go to Wellcome page</Link>
+    </motion.div>
+  );
+}
+
+export default Home;
+
+//About.js
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+
+function About() {
+  return (
+    <motion.div
+      initial={{ x: 100, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: -100, opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <h1>Wellcome Page</h1>
+      <Link to="/">Back to Home</Link>
+    </motion.div>
+  );
+}
+
+export default About;
+
+4.Scroll animations conceptual intro:-
+Scroll animation is a technique where elements on a webpage animate when the user scrolls the page.
+As the user moves down or up, different components fade, slide, scale, or move, creating a more engaging user experience.
+It is commonly used in modern web applications built with frameworks like React and animation libraries like Framer Motion.
+-Types of Scroll Animations:
+1.Fade-in on Scroll
+Elements appear gradually when they enter the screen.
+
+2️.Slide-in Animation
+Elements slide from left, right, top, or bottom.
+
+3️.Parallax Scrolling
+Background moves slower than foreground creating a depth effect.
+
+4️.Progress-based Animation
+Animation progresses depending on scroll position.
+
+-Scroll animation is a web design technique where elements animate based on the user’s scrolling action to create an interactive and engaging user experience.
+
+5.Animate login → dashboard transition:-
+//App.js
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+
+//main.js
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./styles.css";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+//components/PageWrapper.jsx
+import { motion } from "framer-motion";
+
+const pageAnimation = {
+  initial: { opacity: 0, y: 40 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -40 },
+};
+
+function PageWrapper({ children }) {
+  return (
+    <motion.div
+      variants={pageAnimation}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      transition={{ duration: 0.5 }}
+      style={{ width: "100%" }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+export default PageWrapper;
+
+//pages/Dashboard.jsx
+import PageWrapper from "../components/PageWrapper";
+import { motion } from "framer-motion";
+
+function Dashboard() {
+  return (
+    <PageWrapper>
+      <motion.div
+        className="dashboard"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <h1>Dashboard</h1>
+        <p>Welcome to the Transition.</p>
+      </motion.div>
+    </PageWrapper>
+  );
+}
+
+export default Dashboard;
+
+//pages/Login.jsx
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import PageWrapper from "../components/PageWrapper";
+
+function Login() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = () => {
+    setLoading(true);
+
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 1500);
+  };
+
+  return (
+    <PageWrapper>
+      <motion.div
+        className="login-card"
+        initial={{ scale: 0.8 }}
+        animate={{ scale: 1 }}
+      >
+        <h2>Login</h2>
+
+        <input placeholder="Email" />
+        <input type="password" placeholder="Password" />
+
+        <button onClick={handleLogin} disabled={loading}>
+          {loading ? "Loading..." : "Login Now"}
+        </button>
+
+        {loading && (
+          <motion.div
+            className="loading"
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          />
+        )}
+      </motion.div>
+    </PageWrapper>
+  );
+}
+
+export default Login;
+
+//style.css
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-card {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-card input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+.loading {
+  width: 30px;
+  height: 30px;
+  border: 4px solid #ddd;
+  border-top: 4px solid #4f46e5;
+  border-radius: 50%;
+  margin: 15px auto;
+}
+
+.login-card button {
+  padding: 10px;
+  background: hsla(244, 67%, 50%, 0.94);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.dashboard {
+  text-align: center;
+  background: hsla(309, 45%, 45%, 0.94);
+  padding: 30px;
+  border-radius: 10px;
+  width: 500px;
+}
+
+6.Add hover/tap animations on buttons:-
+//App.js
+import Card from "./components/Card";
+
+function App() {
+  return (
+    <div className="container">
+      <Card
+        title="Login"
+        description="Access your account securely"
+        type="login"
+      />
+
+      <Card
+        title="Register"
+        description="Create a new account"
+        type="register"
+      />
+
+      <Card
+        title="Delete"
+        description="Remove your account permanently"
+        type="delete"
+      />
+    </div>
+  );
+}
+
+export default App;
+
+//main.js
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./styles.css";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <div>
+      <h1>Button Hover & Tap Animations</h1>
+    </div>
+    <App />
+  </React.StrictMode>
+);
+
+//components/Card.jsx
+import AnimatedButton from "./AnimatedButton";
+import { motion } from "framer-motion";
+
+function Card({ title, description, type }) {
+  return (
+    <motion.div
+      className="card"
+      whileHover={{ y: -20 }}
+      transition={{ duration: 0.3 }}
+    >
+      <h2>{title}</h2>
+      <p>{description}</p>
+
+      <AnimatedButton text={title} type={type} />
+    </motion.div>
+  );
+}
+
+export default Card;
+
+//components/AnimatedButton.jsx
+import { motion } from "framer-motion";
+
+function AnimatedButton({ text, type }) {
+  const colors = {
+    login: "blue",
+    register: "green",
+    delete: "red",
+  };
+
+  return (
+    <motion.button
+      className="btn"
+      style={{ backgroundColor: colors[type] }}
+      whileHover={{
+        scale: 1.1,
+        boxShadow: "0px 8px 20px rgba(0,0,0,0.2)",
+      }}
+      whileTap={{
+        scale: 0.9,
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+      }}
+    >
+      {text}
+    </motion.button>
+  );
+}
+
+export default AnimatedButton;
+
+//style.css
+body {
+  font-family: Arial, sans-serif;
+  background: #b9bec4;
+  margin: 0;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 100px;
+}
+
+.card {
+  width: 260px;
+  padding: 25px;
+  background: white;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card p {
+  color: #555;
+}
+
+.btn {
+  margin-top: 15px;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+
