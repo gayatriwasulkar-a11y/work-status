@@ -1,0 +1,469 @@
+1.GSAP timeline fundamentals:-
+GreenSock Animation Platform (GSAP) is a powerful JavaScript library that is used by front-end developers to create robust timeline-based animations. 
+GSAP is used to animate anything that can be accessed with JavaScript.
+GSAP (GreenSock Animation Platform) timelines are used to sequence and control multiple animations easily. Instead of triggering many individual animations with delays, 
+a timeline coordinates them in order.
+The gsap.timeline() method is used to create a timeline instance that sequences multiple animations in a controlled and synchronized manner.
+A timeline allows developers to chain animations using methods such as .to(), .from(), and .fromTo(), enabling precise control over the order and timing of each 
+animation step.
+Unlike standalone GSAP animations, which run independently, a timeline groups animations together, allowing for centralized playback control using methods like .play(), 
+.pause(), .reverse(), and .restart().
+Timelines also support features such as relative positioning, overlapping animations using time offsets, labels for navigation, and nesting of other timelines, making 
+them ideal for complex animation sequences.
+example:-
+//index.html
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>GSAP Animation</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<h1>GSAP Animation Example</h1>
+
+<div class="box"></div>
+
+<script src="gsap.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+
+</html>
+
+//script.js
+gsap.to(".box",{
+x:300,
+duration:2
+});
+
+//style.css
+body{
+font-family:Arial;
+padding:40px;
+}
+
+.box{
+width:100px;
+height:100px;
+background:black;
+}
+
+
+2.ScrollTrigger deep usage:-
+GSAP ScrollTrigger is one of the most powerful tools for creating scroll-based animations. It connects animations to the scroll position of the page, enabling effects 
+like pinned sections, parallax, progress-based animations, and scroll storytelling.
+Take full control of scroll-based interactivity with GSAP ScrollTrigger. This collection showcases advanced scroll animations including pinning elements, 
+syncing timelines with scroll, horizontal scroll effects, and animated reveals - all powered by the precision and flexibility of GSAP.
+Create a new functional component and then import GSAP and ScrollTrigger and register the plugin. Registering a plugin ensures that it works smoothly and prevents tree-shaking 
+issues in build tools/bundlers.
+We will use React useRef to reference the component whenever it mounts, once we have the reference to the object, then we can easily apply animations to it. We will be putting 
+the animation code inside a useEffect so that the components animate only once when the browser loads.
+We will use the gsap.fromTo() tween with scrollTrigger.
+Syntax:
+gsap.fromTo(target_element, { from_parameter }, { To_parameter, scrollTrigger: {
+      trigger: target_element
+}})
+
+3.SVG animations and vector motion:-
+-SVG animations are widely used with GSAP to create smooth, scalable vector motion. Because SVG elements are vector-based, they animate perfectly at any resolution, 
+making them ideal for icons, illustrations, logos, and motion graphics.
+-The creative movement of text or visuals in a web application to catch the user's attention or bring the user's attention to a particular component in the design is 
+called animation. SVG Animations or Scalable Vector Graphics Animations are a format of animations more optimized for web design. Since web design is all about capturing the user's 
+attention, it becomes necessary to use animation to communicate the value of our business/our client's business delightfully. Animations help our 
+users to understand and properly digest what's happening in the screen. Objects in real life don't appear and disappear in an instant, so animations can help us bridge the gap 
+between an active and inactive state.
+-SVG Animations or Scalable Vector Graphics Animations are a format of animations more optimized for web design. Since web design is all about capturing the user's attention, 
+Animations become a important weapon in a designer's arsenal. Animations can help you create hierarchy, draw user's attention to a component, make the design understandable and a lot more. 
+Make sure to remember the points we discussed in this article when designing animations for your next application or website.
+
+
+4.Sequence-based animations for dashboards:-
+-Sequence-based animation means multiple animations run in a specific order, where one animation starts after or during another, creating a structured visual flow. 
+Instead of everything animating at once, elements appear step-by-step.
+This technique is widely used in dashboards, landing pages, onboarding flows, and data visualizations to guide user attention.
+-Sequence-based animations organize UI motion so elements animate in a planned order, improving clarity, usability, and visual storytelling.
+This is a supper simple React library that lets us create animations in an easy and straight forward manner.
+The idea behind this library was to create animations that can be controlled very easily.
+-Sequence-based animations example:-
+//App.js
+import React from "react";
+import SequenceAnimatorExample from "./SequenceAnimatorExample";
+
+function App() {
+  return (
+    <div>
+      <h2>Sequence Animation</h2>
+      <SequenceAnimatorExample />
+    </div>
+  );
+}
+
+export default App;
+
+//index.js
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+
+//SequenceAnimatorExample.js
+import React from "react";
+import { SequenceAnimator } from "react-sequence-animator";
+import cat1 from "./statics/cat1.png";
+import cat2 from "./statics/cat2.png";
+import cat3 from "./statics/cat3.png";
+import cat4 from "./statics/cat4.png";
+
+class SequenceAnimatorExample extends React.Component {
+  render() {
+    return (
+      <SequenceAnimator>
+        <img src={cat1} alt="cat1"/>
+        <img src={cat2} alt="cat2"/>
+        <img src={cat3} alt="cat3"/>
+        <img src={cat4} alt="cat4"/>
+        
+      </SequenceAnimator>
+    );
+  }
+}
+
+export default SequenceAnimatorExample;
+
+
+5.Animate dashboard introduction with GSAP:-
+//index.html
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8">
+<title>Employee Dashboard</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="gsap.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="sidebar">
+<h2>HR Panel</h2>
+
+<ul>
+<li>Dashboard</li>
+<li>Employees</li>
+<li>Departments</li>
+<li>Reports</li>
+</ul>
+
+</div>
+
+<div class="progress-section">
+
+<h3>Department Performance</h3>
+
+<div class="progress">
+<div class="progress-bar" data-width="80"></div>
+</div>
+
+<div class="progress">
+<div class="progress-bar" data-width="70"></div>
+</div>
+
+<div class="progress">
+<div class="progress-bar" data-width="90"></div>
+</div>
+
+</div>
+
+<div class="table">
+
+<h3>Employee List</h3>
+
+<div class="row">Gayatri - Developer</div>
+<div class="row">Sanu - Designer</div>
+<div class="row">Parth - Manager</div>
+<div class="row">Aanand - HR</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+
+//script.js
+const tl = gsap.timeline();
+
+tl.from(".sidebar",{
+x:-200,
+duration:1
+})
+
+.from(".progress-bar",{
+width:0,
+duration:1,
+stagger:0.3,
+onStart:function(){
+document.querySelectorAll(".progress-bar").forEach(bar=>{
+bar.style.width = bar.dataset.width + "%";
+});
+}
+});
+
+tl.from(".row",{
+y:20,
+opacity:0,
+stagger:0.2,
+duration:1
+});
+
+//style.css
+body{
+font-family:Arial;
+margin:0;
+background:#f4f6f8;
+}
+
+.container{
+display:flex;
+}
+
+.sidebar{
+width:220px;
+background:#111827;
+color:white;
+height:100vh;
+padding:20px;
+}
+
+.progress-section{
+width:500px;
+margin-top:40px;
+}
+
+.progress{
+background:#ddd;
+height:10px;
+border-radius:5px;
+margin:15px 0;
+overflow:hidden;
+}
+
+.progress-bar{
+height:10px;
+width:0%;
+background:#3b82f6;
+}
+
+.table{
+margin-top:8px;
+width:800px;
+background:white;
+padding:50px;
+border-radius:8px;
+}
+
+.row{
+padding:10px;
+border-bottom:1px solid #ddd;
+opacity:1;
+}
+
+
+6.Add scroll-linked animation to stats section:-
+//index.html
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8">
+<title>Scroll Stats Animation</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="gsap.min.js"></script>
+
+<script src="ScrollTrigger.min.js"></script>
+
+</head>
+
+<body>
+
+<section class="hero">
+<h1>Wellcome GTasterix pvt ltd</h1>
+<p>We are dedicated to streamlining and improving the industry here at GTasterix.Emphasizing <br/>innovation to provide optimum solutions for 
+your clients and give them a competitive edge.<br/>Striving to bring future technology excellence for customers, colleagues, and shareholders.</p>
+<br/>
+<p>Scroll Down to View Statistics</p>
+<div class="card-container">
+<div class="card">
+<h3>Our Mission</h3>
+<p>To bring the future technology excellence for our customers, colleagues and shareholders.</p>
+</div>
+<br/>
+<div class="card">
+<h3>Our Vision</h3>
+<p>To build quality solutions, boost productivity and reduce time-to-market at minimal cost.</p>
+</div>
+</div>
+</section>
+
+<section class="stats">
+
+<h2>Company Performance</h2>
+
+<div class="stats-container">
+
+<div class="stat-card">
+<h3 class="counter" data-target="250">0</h3>
+<p>Employees</p>
+</div>
+
+<div class="stat-card">
+<h3 class="counter" data-target="120">0</h3>
+<p>Projects</p>
+</div>
+
+<div class="stat-card">
+<h3 class="counter" data-target="98">0</h3>
+<p>Clients</p>
+</div>
+
+<div class="stat-card">
+<h3 class="counter" data-target="15">0</h3>
+<p>Awards</p>
+</div>
+
+</div>
+
+</section>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+
+//script.js
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.to(".card",{
+opacity:1,
+y:0,
+duration:1,
+stagger:0.1,
+scrollTrigger:{
+trigger:".hero",
+start:"top 80%"
+}
+});
+
+gsap.to(".stat-card",{
+opacity:1,
+y:0,
+duration:1,
+stagger:0.3,
+scrollTrigger:{
+trigger:".stats",
+start:"top 80%"
+}
+});
+
+const counters = document.querySelectorAll(".counter");
+
+counters.forEach(counter => {
+
+let target = +counter.getAttribute("data-target");
+
+gsap.to(counter,{
+innerText:target,
+duration:2,
+snap:{innerText:1},
+
+scrollTrigger:{
+trigger:".stats",
+start:"top 80%"
+},
+
+onUpdate:function(){
+counter.innerText = Math.floor(counter.innerText);
+}
+
+});
+
+});
+
+//style.css
+body{
+font-family:'Times New Roman';
+margin:0;
+background:#f4f6f8;
+}
+
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:#111827;
+color:white;
+}
+
+.card-container{
+display:flex;
+justify-content:center;
+gap:30px;
+margin-top:40px;
+}
+
+.card{
+background:rgb(25, 17, 47);
+color: aliceblue;
+padding:20px;
+width:180px;
+border-radius:10px;
+box-shadow:0 5px 15px hsla(257, 16%, 18%, 0.885);
+opacity:0;
+transform:translateY(50px);
+justify-content:center;
+gap:30px;
+margin-top:40px;
+}
+
+.stats{
+padding:100px 40px;
+text-align:center;
+}
+
+.stats-container{
+display:flex;
+justify-content:center;
+gap:30px;
+margin-top:40px;
+}
+
+.stat-card{
+background:white;
+padding:30px;
+width:180px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+opacity:0;
+transform:translateY(50px);
+}
+
+.counter{
+font-size:40px;
+color:#3b82f6;
+}
