@@ -1,0 +1,499 @@
+1. Accessibility rules: ARIA roles, semantic HTML:-
+ARIA roles:-(Expanding Accessibility Beyond HTML)
+ARIA (Accessible Rich Internet Applications) roles, states, and properties let developers describe UI elements and their interactions when native HTML falls short.
+ARIA roles are added to HTML elements (using the role attribute) to define their purpose for assistive technologies.
+They enable developers to make custom widgets (like sliders, tabs, or modals) accessible, clarifying what kind of component it is and how users should interact with it.
+Example:
+<div role="button" tabindex="0" aria-pressed="false">Toggle</div>
+
+Semantic HTML:- (The Foundation of Accessible HTML)
+Semantic HTML uses the correct elements for their intended purpose, such as <header>, <main>, <footer>, <article>, and <nav>. These elements give structure and meaning 
+to your content, which is crucial for both users and assistive technologies like screen readers.
+Clearly define the role and content of elements.
+Improve code readability and structure.
+Enhance accessibility for screen readers.
+Help browsers and search engines understand page content.
+Examples include <form>, <table>, <article>, <header>, and <footer>.
+
+2.Keyboard navigation support:-
+Keyboard navigation accessibility ensures that your users can navigate and interact with your website without relying on a mouse. 
+It involves designing websites so that all interactive elements like links, buttons, forms, and menus, can be accessed using the keyboard alone, 
+typically with the Tab, Shift + Tab, Enter, and Arrow keys. 
+Proper focus management, logical tab order, and visible focus indicators are key components of an accessible keyboard-friendly experience. 
+Keyboard navigation is a method of controlling a computer interface through the use of keyboard keys, bypassing the need for a mouse or touchpad. 
+This approach enables users to navigate through menus, select buttons, interact with various web elements, and input data within text fields, relying entirely on keystrokes. 
+Essential for enhancing web accessibility, keyboard navigation provides an alternative means of web interaction for users with motor impairments or those who prefer keyboard 
+shortcuts for efficiency and speed.
+Several keys stand out for their critical roles in facilitating user interaction. These include:
+Tab key: Moves the focus forward through interactive page elements. It's essential for traversing links, buttons, and form fields in a logical order (e.g., for English pages, 
+this means seamless navigation from left to right and from top to bottom)
+Shift + Tab: Works in conjunction with the Tab key to move the focus backward, allowing users to navigate in reverse order
+Enter key/Spacebar: Activates the focused element, equivalent to clicking with a mouse. It's commonly used for interacting with buttons, form fields, and links
+Arrow keys: Navigate between items within a component, such as dropdown menus or a group of radio buttons, offering precise control
+Esc key: Often used to close or exit modal windows, dropdowns, or dialogues, providing a way to back out of current interactions.
+
+
+3.Focus management:-
+Focus Management is a critical aspect of user experience (UX) design that involves the deliberate handling of focus within digital interfaces. It ensures that users 
+can navigate through elements on a page, such as links, buttons, and form fields, using a keyboard alone or with assistive technologies. 
+Proper focus management is essential for creating accessible experiences, particularly for users with disabilities.
+focus management refers to the strategies and practices that help individuals concentrate on their tasks without succumbing to external or internal interruptions. 
+Whether you’re a student preparing for exams or a professional juggling multiple projects, effective focus management can significantly impact your performance.
+When you manage your focus well, you can make better use of your time and resources. This isn’t just about working harder, but rather about working smarter. 
+For a deeper understanding of the principles behind focus management, check out this overview of focus management principles.
+Focus management is a strategic approach to optimizing employee productivity and well-being by enhancing attention, reducing distractions, and prioritizing tasks 
+effectively. It involves techniques and policies that help individuals and teams maintain concentration on high-value activities, ultimately leading to improved 
+performance and job satisfaction.
+-Benefits
+Improves accessibility for users with disabilities, particularly those relying on keyboard navigation.
+Creates a more intuitive and user-friendly experience for all users.
+Reduces cognitive load by providing a predictable navigation structure.
+Enhances compliance with accessibility standards and regulations.
+Increases user satisfaction and engagement with the product.
+
+4.Color contrast compliance (WCAG):-
+WCAG (Web Content Accessibility Guidelines) is the international standard for web accessibility, published by the W3C. 
+The most widely adopted version is WCAG 2.1, with WCAG 2.2 as the current standard.
+Color Contrast Compliance (WCAG) ensures that text and visual elements are readable for everyone, including users with low vision or color 
+blindness. It’s part of the World Wide Web Consortium accessibility guidelines.
+example:
+Good contrast
+Black (#000) on White (#FFF) → 21:1
+Dark Blue on Light Yellow → readable
+
+body {
+  background: #ffffff;
+  color: #222222;
+}
+
+5.Add ARIA labels everywhere:-
+//App.js
+import React, { useState } from "react";
+import Navbar from "./components/Navbar";
+import FoodMenu from "./components/FoodMenu";
+import Cart from "./components/Cart";
+import Modal from "./components/Modal";
+import Footer from "./components/Footer";
+import "./styles.css";
+
+function App() {
+  const [cartOpen, setCartOpen] = useState(false);
+
+  return (
+    <div className="app-container">
+      {/* Skip Link */}
+      <a href="#main" className="skip-link">
+        Skip to main content
+      </a>
+
+      {/* Header */}
+      <Navbar openCart={() => setCartOpen(true)} />
+
+      {/* Main Content */}
+      <main id="main" aria-label="Main content">
+        <FoodMenu />
+      </main>
+
+      {/* Footer */}
+      <Footer />
+
+      {/* Modal */}
+      {cartOpen && <Modal close={() => setCartOpen(false)} />}
+    </div>
+  );
+}
+
+export default App;
+
+
+//Components/Navbar.js
+import React from "react";
+
+function Navbar({ openCart }) {
+  return (
+    <header>
+      <nav aria-label="Main navigation">
+        <h1>Foodies 🍔</h1>
+
+        <button aria-label="Open cart" onClick={openCart}>
+          🛒
+        </button>
+      </nav>
+    </header>
+  );
+}
+
+export default Navbar;
+
+//Components/FoodMenu.js
+import React from "react";
+
+function FoodMenu() {
+  return (
+    <section aria-labelledby="menu-heading">
+      <h2 id="menu-heading">Menu</h2>
+
+      <div className="menu-list">
+        <article aria-labelledby="pizza-title">
+          <h3 id="pizza-title">Pizza</h3>
+          <p>Cheesy delight with toppings.</p>
+          <button aria-label="Add pizza to cart">Add to Cart</button>
+        </article>
+
+        <article aria-labelledby="burger-title">
+          <h3 id="burger-title">Burger</h3>
+          <p>Juicy grilled burger.</p>
+          <button aria-label="Add burger to cart">Add to Cart</button>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+export default FoodMenu;
+
+//Components/Cart.js
+import React from "react";
+
+function Cart() {
+  return (
+    <section aria-labelledby="cart-heading">
+      <h2 id="cart-heading">Your Cart</h2>
+      <p>No items added yet.</p>
+    </section>
+  );
+}
+
+export default Cart;
+
+//Components/Modal.js
+import React, { useEffect, useRef } from "react";
+
+function Modal({ close }) {
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current.focus();
+  }, []);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cart-title"
+      className="modal"
+    >
+      <div className="modal-content" tabIndex="-1" ref={ref}>
+        <h2 id="cart-title">Cart</h2>
+
+        <p>Your cart is empty.</p>
+
+        <button aria-label="Close cart" onClick={close}>
+          Close
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default Modal;
+
+//Components/Footer.js
+import React from "react";
+
+function Footer() {
+  return (
+    <footer aria-label="Footer">
+      <p>© 2026 Foodies</p>
+
+      <a href="#" aria-label="Visit our Instagram page">
+        📸 Instagram
+      </a>
+    </footer>
+  );
+}
+
+export default Footer;
+
+//Styles.css
+.skip-link {
+  position: absolute;
+  left: -999px;
+}
+
+.skip-link:focus {
+  left: 10px;
+  top: 10px;
+  background: black;
+  color: white;
+  padding: 8px;
+}
+
+button:focus {
+  outline: 2px solid red;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+
+6.Implement keyboard navigation for modals:-
+//App.js
+import React, { useState, useRef } from "react";
+import Navbar from "./components/Navbar";
+import FoodMenu from "./components/FoodMenu";
+import Modal from "./components/Modal";
+import Footer from "./components/Footer";
+import "./styles.css";
+
+function App() {
+  const [cartOpen, setCartOpen] = useState(false);
+  const buttonRef = useRef(null);
+
+  return (
+    <div className="app-container">
+      {/* Skip Link */}
+      <a href="#main" className="skip-link">
+        Skip to main content
+      </a>
+
+      {/* Navbar */}
+      <Navbar
+        openCart={() => setCartOpen(true)}
+        buttonRef={buttonRef}
+      />
+
+      {/* Main */}
+      <main id="main" aria-label="Main content">
+        <FoodMenu />
+      </main>
+
+      {/* Footer */}
+      <Footer />
+
+      {/* Modal */}
+      {cartOpen && (
+        <Modal
+          close={() => setCartOpen(false)}
+          triggerRef={buttonRef}
+        />
+      )}
+    </div>
+  );
+}
+
+export default App;
+
+//components/Navbar.js
+import React from "react";
+
+function Navbar({ openCart, buttonRef }) {
+  return (
+    <header>
+      <nav aria-label="Main navigation">
+        <h1>Food App</h1>
+
+        <button
+          ref={buttonRef}
+          onClick={openCart}
+          aria-label="Open cart modal"
+        >
+          🛒
+        </button>
+      </nav>
+    </header>
+  );
+}
+
+export default Navbar;
+
+//components/FoodMenu.js
+import React from "react";
+
+function FoodMenu() {
+  return (
+    <section aria-labelledby="menu-heading">
+      <h2 id="menu-heading">Menu</h2>
+
+      <div className="menu-list">
+        <article aria-labelledby="pizza-title">
+          <h3 id="pizza-title">Pizza</h3>
+          <p>Cheesy delight with toppings.</p>
+          <button aria-label="Add pizza to cart">
+            Add to Cart
+          </button>
+        </article>
+
+        <article aria-labelledby="burger-title">
+          <h3 id="burger-title">Burger</h3>
+          <p>Juicy grilled burger.</p>
+          <button aria-label="Add burger to cart">
+            Add to Cart
+          </button>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+export default FoodMenu;
+
+//components/Modal.js
+import React, { useEffect, useRef } from "react";
+
+function Modal({ close, triggerRef }) {
+  const modalRef = useRef(null);
+  const focusableElementsRef = useRef([]);
+
+  useEffect(() => {
+    const modal = modalRef.current;
+
+    const focusable = modal.querySelectorAll(
+      "button, [href], input, textarea, select, [tabindex]:not([tabindex='-1'])"
+    );
+
+    focusableElementsRef.current = focusable;
+
+    if (focusable.length > 0) {
+      focusable[0].focus();
+    }
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        close();
+      }
+
+      if (e.key === "Tab") {
+        const first = focusableElementsRef.current[0];
+        const last =
+          focusableElementsRef.current[
+            focusableElementsRef.current.length - 1
+          ];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+
+      if (triggerRef?.current) {
+        triggerRef.current.focus();
+      }
+    };
+  }, [close, triggerRef]);
+
+  return (
+    <div
+      className="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <div className="modal-content" ref={modalRef}>
+        <h2 id="modal-title">Your Cart</h2>
+
+        <p>Your cart is empty.</p>
+
+        <button>Checkout</button>
+        <button onClick={close}>Close</button>
+      </div>
+    </div>
+  );
+}
+
+export default Modal;
+
+//components/Footer.js
+import React from "react";
+
+function Footer() {
+  return (
+    <footer aria-label="Website footer">
+      <p>© 2026 Food App</p>
+    </footer>
+  );
+}
+
+export default Footer;
+
+//styles.css
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #a9b0bb;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: -999px;
+}
+
+.skip-link:focus {
+  left: 10px;
+  top: 10px;
+  background: black;
+  color: white;
+  padding: 8px;
+}
+
+/* Navbar */
+nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: #333;
+  color: white;
+}
+
+/* Menu */
+.menu-list {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+article {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
