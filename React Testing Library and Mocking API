@@ -1,0 +1,703 @@
+1.React Testing Library philosophy:-
+React Testing Library focuses on testing components from the user’s perspective by interacting with the DOM and avoiding implementation details, 
+ensuring reliable and maintainable tests.
+The React Testing Library is a very lightweight solution for testing React components. It provides light utility functions on top of react-dom and 
+react-dom/test-utils, in a way that encourages better testing practices.
+Basic example:-
+// NOTE: React Testing Library works well with React Hooks and classes.
+// Your tests will be the same regardless of how you write your components.
+// hidden-message.js
+import * as React from 'react'
+
+function HiddenMessage({children}) {
+  const [showMessage, setShowMessage] = React.useState(false)
+  return (
+    <div>
+      <label htmlFor="toggle">Show Message</label>
+      <input
+        id="toggle"
+        type="checkbox"
+        onChange={e => setShowMessage(e.target.checked)}
+        checked={showMessage}
+      />
+      {showMessage ? children : null}
+    </div>
+  )
+}
+
+export default HiddenMessage
+
+
+2.Unit testing user interactions:-
+A unit test is a small piece of code that checks if a specific function or method in is an application works correctly. It will work as the function inputs and verifying the outputs. 
+These tests check that the code work as expected based on the logic the developer intended.
+Unit testing is the process of testing the smallest parts of your code, like it is a method in which we verify the code's correctness by running one by one. It's a key part of 
+software development that improves code quality by testing each unit in isolation.
+You write unit tests for these code units and run them automatically every time you make changes. If a test fails, it helps you quickly find and fix the issue. 
+Unit testing promotes modular code, ensures better test coverage, and saves time by allowing developers to focus more on coding than manual testing.
+example:-
+//Create the Calculator Class.
+public class Calculator {
+    // Method to add two numbers
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    // Method to subtract two numbers
+    public int subtract(int a, int b) {
+        return a - b;
+    }
+}
+//Create the TestNG Test Class.
+package com.example.tests;
+
+import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class CalculatorTest {
+
+    private Calculator calculator;
+
+    // This method runs before each test method
+    @BeforeMethod
+    public void setUp() {
+        calculator = new Calculator();
+    }
+
+    // Test for the 'add' method
+    @Test
+    public void testAdd() {
+        int result = calculator.add(5, 3);
+        // Assert that the result of 5 + 3 is 8
+        Assert.assertEquals(result, 8, "Addition result is incorrect");
+    }
+
+    // Test for the 'subtract' method
+    @Test
+    public void testSubtract() {
+        int result = calculator.subtract(5, 3);
+        // Assert that the result of 5 - 3 is 2
+        Assert.assertEquals(result, 2, "Subtraction result is incorrect");
+    }
+}
+
+3.Mocking API calls:-
+API mocking is the practice of simulating an API’s behavior by creating fake endpoints or responses. Instead of calling the real backend, your application interacts 
+with these mocked responses, which act like the real API but are fully controlled and predictable.
+-Benefits of API Mocking
+-Faster Development: Teams can work in parallel without waiting for backend readiness.
+-More Reliable Testing: Mocks eliminate external dependencies and flakiness in test environments.
+-Cost Efficiency: Expensive third-party API calls can be replaced with free, local mocks.
+-Greater Control: You can simulate edge cases, delays, and errors that are hard to trigger with real services.
+-Consistent Environments: Mocked responses ensure tests behave the same across machines and pipelines.
+example:-
+import { rest } from "msw";
+import { setupServer } from "msw/node";
+
+const server = setupServer(
+  rest.get("/api/users", (req, res, ctx) => {
+    return res(
+      ctx.json([{ name: "Yug" }])
+    );
+  })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+//Test:
+render(<App />);
+expect(await screen.findByText("Yug")).toBeInTheDocument();
+
+4.Integration testing forms & modals:-
+Integration testing is important because it verifies that individual software modules or components work together correctly as a whole system. This ensures that the integrated 
+software functions as intended and helps identify any compatibility or communication issues between different parts of the system. By detecting and resolving 
+integration problems early, integration testing contributes to the overall reliability, performance, and quality of the software product.
+1. Form Integration Testing (Detailed)
+1. Input Interaction
+user type
+value update 
+2. Validation
+empty input → error message
+invalid data → validation error
+3. Submission
+button click → form submit
+correct data → success message / API call
+example:
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import Form from "./Form";
+
+test("user fills and submits form", async () => {
+  render(<Form />);
+
+  // input
+  const nameInput = screen.getByLabelText("Name");
+  await userEvent.type(nameInput, "Gayatri");
+
+  // submit
+  const button = screen.getByRole("button", { name: /submit/i });
+  await userEvent.click(button);
+
+  // result
+  expect(await screen.findByText("Form submitted")).toBeInTheDocument();
+});
+
+2. Modal Integration Testing (Detailed)
+1. Open Modal
+button click → modal 
+2. Content Rendering
+modal content render 
+3. Close Modal
+close button → modal hide
+example:
+test("modal open and close", async () => {
+  render(<App />);
+
+  // open modal
+  await userEvent.click(screen.getByText("Open Modal"));
+
+  expect(screen.getByText("Modal Content")).toBeInTheDocument();
+
+  // close modal
+  await userEvent.click(screen.getByText("Close"));
+
+  expect(screen.queryByText("Modal Content")).not.toBeInTheDocument();
+});
+
+5.Jest mocking techniques:-
+Mocking in Jest means replacing real functions, modules, or components with mock versions (fake versions that act like the real ones) to test how your code interacts with them. 
+This helps you focus on testing specific parts of your code while avoiding the need to rely on external systems, making your tests faster and more reliable.
+Jest offers three effective methods to mock modules in your tests, enabling you to isolate and control external dependencies for focused testing.
+Jest provides multiple mocking techniques like jest.fn, jest.mock, jest.spyOn, and async helpers such as mockResolvedValue to simulate dependencies and control behavior during testing.
+Jest mocking techniques allow you to replace real dependencies with controlled fake implementations for reliable and isolated testing.
+1.Direct Mocking 
+2.Global Mocking 
+3.Manual Mocking (mocks Folder)
+example:
+jest.mock("./api");
+
+import { fetchUsers } from "./api";
+
+test("shows users", async () => {
+  fetchUsers.mockResolvedValue([
+    { name: "Gayatri" }
+  ]);
+
+  render(<App />);
+
+  expect(await screen.findByText("Gayatri"))
+    .toBeInTheDocument();
+});
+
+
+6.Test Button, Modal, Form components:-
+//App.js
+import React, { useState } from "react";
+import Button from "./components/Button";
+import Modal from "./components/Modal";
+import Form from "./components/Form";
+
+function App() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <h1>Testing Demo</h1>
+
+      <Button onClick={() => setOpen(true)}>Open Modal</Button>
+
+      <Modal isOpen={open} onClose={() => setOpen(false)}>
+        <Form onSubmit={(data) => console.log(data)} />
+      </Modal>
+    </div>
+  );
+}
+
+export default App;
+
+//components/Button.js
+import React from "react";
+
+function Button({ onClick, children }) {
+  return <button onClick={onClick}>{children}</button>;
+}
+
+export default Button;
+
+//components/Button.test.js
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import Button from "./Button";
+
+test("button click works", async () => {
+  const handleClick = jest.fn();
+
+  render(<Button onClick={handleClick}>Click Me</Button>);
+
+  const btn = screen.getByRole("button", { name: /click me/i });
+
+  await userEvent.click(btn);
+
+  expect(handleClick).toHaveBeenCalledTimes(1);
+});
+
+//components/Modal.js
+import React from "react";
+
+function Modal({ isOpen, onClose, children }) {
+  if (!isOpen) return null;
+
+  return (
+    <div>
+      <div>Modal Content</div>
+      {children}
+      <button onClick={onClose}>Close</button>
+    </div>
+  );
+}
+
+export default Modal;
+
+//components/Modal.test.js
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import Modal from "./Modal";
+
+test("modal renders when open", () => {
+  render(<Modal isOpen={true} onClose={() => {}} />);
+
+  expect(screen.getByText(/modal content/i)).toBeInTheDocument();
+});
+
+test("modal not render when closed", () => {
+  render(<Modal isOpen={false} onClose={() => {}} />);
+
+  expect(screen.queryByText(/modal content/i)).not.toBeInTheDocument();
+});
+
+test("close button works", async () => {
+  const handleClose = jest.fn();
+
+  render(<Modal isOpen={true} onClose={handleClose} />);
+
+  const btn = screen.getByRole("button", { name: /close/i });
+
+  await userEvent.click(btn);
+
+  expect(handleClose).toHaveBeenCalled();
+});
+
+
+//components/Form.js
+import React, { useState } from "react";
+
+function Form({ onSubmit }) {
+  const [name, setName] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(name);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="name">Name</label>
+
+      <input
+        id="name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+
+export default Form;
+
+//components/Form.test.js
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import Form from "./Form";
+
+test("form submits data", async () => {
+  const handleSubmit = jest.fn();
+
+  render(<Form onSubmit={handleSubmit} />);
+
+  const input = screen.getByLabelText(/name/i);
+  const button = screen.getByRole("button", { name: /submit/i });
+
+  await userEvent.type(input, "Gayatri");
+  await userEvent.click(button);
+
+  expect(handleSubmit).toHaveBeenCalledWith("Gayatri");
+});
+
+//Integration.test.js
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import Modal from "./Modal";
+import Form from "./Form";
+
+test("form inside modal works", async () => {
+  const handleSubmit = jest.fn();
+
+  render(
+    <Modal isOpen={true} onClose={() => {}}>
+      <Form onSubmit={handleSubmit} />
+    </Modal>
+  );
+
+  const input = screen.getByLabelText(/name/i);
+  const button = screen.getByRole("button", { name: /submit/i });
+
+  await userEvent.type(input, "Test User");
+  await userEvent.click(button);
+
+  expect(handleSubmit).toHaveBeenCalledWith("Test User");
+});
+
+
+7.Mock backend API in tests:-
+//setupTests.js
+import "@testing-library/jest-dom";
+import { server } from "./mocks/server";
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+//Component/ApiForm.js
+import { useState } from "react";
+
+export default function ApiForm() {
+  const [name, setName] = useState("");
+  const [msg, setMsg] = useState("");
+
+  const submit = async (e) => {
+    e.preventDefault();
+
+    const res = await fetch("/api/submit", {
+      method: "POST",
+      body: JSON.stringify({ name }),
+    });
+
+    const data = await res.json();
+    setMsg(data.message);
+  };
+
+  return (
+    <>
+      <form onSubmit={submit}>
+        <input onChange={(e) => setName(e.target.value)} />
+        <button>Send</button>
+      </form>
+      <p>{msg}</p>
+    </>
+  );
+}
+
+//Components/ApiForm.test.js
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import ApiForm from "./ApiForm";
+
+test("api call", async () => {
+  render(<ApiForm />);
+
+  await userEvent.type(screen.getByRole("textbox"), "Gayatri");
+  await userEvent.click(screen.getByText("Send"));
+
+  expect(await screen.findByText(/hello gayatri/i)).toBeInTheDocument();
+});
+
+//mocks/handlers.js
+import { rest } from "msw";
+
+export const handlers = [
+  rest.post("/api/submit", async (req, res, ctx) => {
+    const body = await req.json();
+
+    return res(ctx.json({ message: `Hello ${body.name}` }));
+  }),
+];
+
+//mocks/server.js
+import { setupServer } from "msw/node";
+import { handlers } from "./handlers";
+
+export const server = setupServer(...handlers);
+
+
+8.Write integration test for login flow:-
+//App.js
+import Button from "./components/Button";
+import Modal from "./components/Modal";
+import Form from "./components/Form";
+import ApiForm from "./components/ApiForm";
+import Login from "./components/Login";
+
+export default function App() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <h1>Testing Demo</h1>
+
+      <Button onClick={() => setOpen(true)}>Open Modal</Button>
+
+      <Modal isOpen={open} onClose={() => setOpen(false)}>
+        <Form onSubmit={(data) => console.log(data)} />
+      </Modal>
+
+      <hr />
+
+      <ApiForm />
+
+      <hr />
+
+      <Login />
+    </div>
+  );
+}
+
+//components/Button.js
+export default function Button({ onClick, children }) {
+  return <button onClick={onClick}>{children}</button>;
+}
+
+//components/Button.test.js
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import Button from "./Button";
+
+test("button click", async () => {
+  const fn = jest.fn();
+  render(<Button onClick={fn}>Click</Button>);
+  await userEvent.click(screen.getByText("Click"));
+  expect(fn).toHaveBeenCalled();
+});
+
+//components/ApiForm.js
+import { useState } from "react";
+
+export default function ApiForm() {
+  const [name, setName] = useState("");
+  const [msg, setMsg] = useState("");
+
+  const submit = async (e) => {
+    e.preventDefault();
+
+    const res = await fetch("/api/submit", {
+      method: "POST",
+      body: JSON.stringify({ name }),
+    });
+
+    const data = await res.json();
+    setMsg(data.message);
+  };
+
+  return (
+    <>
+      <form onSubmit={submit}>
+        <input onChange={(e) => setName(e.target.value)} />
+        <button>Send</button>
+      </form>
+      <p>{msg}</p>
+    </>
+  );
+}
+
+//components/ApiForm.test.js
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import ApiForm from "./ApiForm";
+
+test("api call", async () => {
+  render(<ApiForm />);
+  await userEvent.type(screen.getByRole("textbox"), "Gayatri");
+  await userEvent.click(screen.getByText("Send"));
+  expect(await screen.findByText(/hello gayatri/i)).toBeInTheDocument();
+});
+
+//components/Form.js
+import { useState } from "react";
+
+export default function Form({ onSubmit }) {
+  const [name, setName] = useState("");
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit(name);
+      }}
+    >
+      <input onChange={(e) => setName(e.target.value)} />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+
+//components/Form.test.js
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import Form from "./Form";
+
+test("form submit", async () => {
+  const fn = jest.fn();
+  render(<Form onSubmit={fn} />);
+  await userEvent.type(screen.getByRole("textbox"), "Test");
+  await userEvent.click(screen.getByText("Submit"));
+  expect(fn).toHaveBeenCalledWith("Test");
+});
+
+//components/Login.js
+import { useState } from "react";
+
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [msg, setMsg] = useState("");
+
+  const login = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) throw new Error();
+
+      const data = await res.json();
+      setMsg(`Welcome ${data.user}`);
+    } catch {
+      setMsg("Invalid Error");
+    }
+  };
+
+  return (
+    <>
+      <form onSubmit={login}>
+        <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+        <input
+          placeholder="Password"
+          type="password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button>Login</button>
+      </form>
+      <p>{msg}</p>
+    </>
+  );
+}
+
+//components/Login.test.js
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import Login from "./Login";
+
+test("success login", async () => {
+  render(<Login />);
+  await userEvent.type(screen.getByPlaceholderText(/email/i), "test@mail.com");
+  await userEvent.type(screen.getByPlaceholderText(/password/i), "1234");
+  await userEvent.click(screen.getByText("Login"));
+  expect(await screen.findByText(/welcome gayatri/i)).toBeInTheDocument();
+});
+
+test("failed login", async () => {
+  render(<Login />);
+  await userEvent.type(screen.getByPlaceholderText(/email/i), "wrong");
+  await userEvent.type(screen.getByPlaceholderText(/password/i), "wrong");
+  await userEvent.click(screen.getByText("Login"));
+  expect(await screen.findByText(/invalid/i)).toBeInTheDocument();
+});
+
+//components/Modal.js
+export default function Modal({ isOpen, onClose, children }) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-box">
+        {children}
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+}
+
+//components/Modal.test.js
+import { render, screen } from "@testing-library/react";
+import Modal from "./Modal";
+
+test("modal open", () => {
+  render(<Modal isOpen={true} />);
+  expect(screen.getByText(/close/i)).toBeInTheDocument();
+});
+
+test("modal closed", () => {
+  render(<Modal isOpen={false} />);
+  expect(screen.queryByText(/close/i)).not.toBeInTheDocument();
+});
+
+//mocks/handlers.js
+import { rest } from "msw";
+
+export const handlers = [
+  rest.post("/api/submit", async (req, res, ctx) => {
+    const body = await req.json();
+    return res(ctx.json({ message: `Hello ${body.name}` }));
+  }),
+
+  rest.post("/api/login", async (req, res, ctx) => {
+    const { email, password } = await req.json();
+
+    if (email === "test@mail.com" && password === "1234") {
+      return res(ctx.json({ user: "Gayatri" }));
+    }
+
+    return res(ctx.status(401));
+  }),
+];
+
+//mocks/server.js
+import { setupServer } from "msw/node";
+import { handlers } from "./handlers";
+
+export const server = setupServer(...handlers);
+
+//styles.css
+body {
+  font-family: Arial;
+  background: #f4f6fb;
+  text-align: center;
+}
+
+button {
+  padding: 10px;
+  background: blue;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-box {
+  background: white;
+  padding: 20px;
+}
+
