@@ -1,0 +1,559 @@
+1.UI system architecture:-
+UI system architecture defines how your frontend is structured, how data flows, and how different parts interact to build a clean and scalable application.
+UI system architecture is about how the front-end (user interface) of an application is structured, organized, and how its parts communicate. It defines 
+how your UI is built so it’s scalable, maintainable, and easy to evolve.
+UI architecture is the design structure of your frontend codebase, including:
+Components (buttons, forms, pages)
+State management
+Data flow
+API communication
+Styling strategy
+-Key Principles
+1.Separation of Concerns
+Each layer does one job only.
+2.Reusability
+Components should be reusable.
+3.Scalability
+Easy to add features without breaking things.
+4.Maintainability
+Code should be easy to read and update.
+5.Testability
+Logic should be easy to test independently.
+
+
+2.Reusability patterns for design systems:-
+Design patterns are reusable solutions to common software design problems that help developers build cleaner and more maintainable systems. They provide templates 
+for solving issues in object creation, structure, and behaviour. They improve code flexibility and scalability.
+Software design pattern is a general, reusable solution of how to solve a common problem when designing an application or system. Unlike a library or framework, 
+which can be inserted and used right away, a design pattern is more of a template to approach the problem at hand.
+Design patterns are used to support object-oriented programming (OOP), a paradigm that is based on the concepts of both objects (instances of a class; data with 
+unique attributes) and classes (user-defined types of data).
+Provide standard, proven solutions to recurring design problems.
+Improve code readability, reusability, and maintainability.
+Help developers follow best practices in software architecture.
+Reduce development time by avoiding reinventing solutions.
+Reusability Patterns:-
+1. Component Variants Pattern
+2. Composition Pattern
+3. Props Configuration Pattern
+4. Higher-Order Components (HOC)
+5. Controlled vs Uncontrolled Pattern
+6. Theme Pattern
+etc.
+
+
+3.Typography & spacing scale:-
+-Typography is the art and technique of arranging type to make written language legible, readable, and appealing. On the web, good typography creates 
+hierarchy, establishes tone, and guides users through content.
+A typography scale is a predefined set of font sizes, line heights, and weights used across your application.
+Instead of using random values, you define a structured scale like: 12px, 14px, 16px, 20px, 24px, 32px
+example:
+const typography = {
+  fontSize: {
+    xs: "12px",
+    sm: "14px",
+    base: "16px",
+    lg: "20px",
+    xl: "24px",
+    "2xl": "32px",
+    "3xl": "40px"
+  },
+  fontWeight: {
+    normal: 400,
+    medium: 500,
+    bold: 700
+  },
+  lineHeight: {
+    normal: 1.5,
+    heading: 1.2
+  }
+};
+
+//usage
+<h1 className="text-3xl">Heading</h1>
+<p className="text-base">Paragraph</p>
+
+-A spacing scale is a systematic approach to defining the spacing and sizing of elements in your design. It typically uses a geometric progression to ensure 
+proportional scaling, which helps maintain consistency throughout your design.
+A spacing scale is a set of predefined values for margin, padding, and layout spacing.
+Instead of random spacing like 13px or 27px, you follow a system.
+-Steps to Define a Spacing Scale
+Choose a Base Unit The base unit is the smallest increment in your spacing scale. Common choices include 4px, 8px, or 10px. The choice of base unit depends on 
+your design requirements and the level of granularity you need.
+Define the Scale Decide on the progression for your scale. The most common progression is geometric, often doubling the previous value.
+Apply the Scale Apply your spacing scale to different elements in your design system. This includes Margins, Padding & Gaps, to ensure consistent spacing within and around components. 
+You will also align your grid system with the spacing scale for consistent layout structure.
+example:-
+const spacing = {
+  0: "0px",
+  1: "4px",
+  2: "8px",
+  3: "12px",
+  4: "16px",
+  5: "20px",
+  6: "24px",
+  8: "32px",
+  10: "40px",
+  12: "48px"
+}; 
+
+//usage
+<div style={{ padding: spacing[4] }}>
+  Content
+</div>
+
+
+4.Color palette & theme strategy:-
+A color palette is a collection of colors that complement one another and create a visually appealing and cohesive design. A Color Palette serves as a guide for designers to 
+ensure that the color is being used consistently throughout the design project, whether it is a website, mobile app, or any other digital or print design. Color Palette conveys 
+emotions, personality, and brand identity by using different colors together in a complementary manner.
+In simpler terms, a color palette is a curated set of colors that complement each other and help create a harmonious and aesthetically pleasing design. To draw a parallel with 
+traditional arts, it is like a painter carefully choosing a set of colors for their palette which will then be used in creating a masterpiece
+-Types of Color Palettes
+1. Monochromatic Palette
+The Monochromatic Palette consists of different shades and tints of a single color. It creates a cohesive and harmonious look. Monochromatic Palette is considered as a good choice 
+for minimalist designs or designs where you want to convey a specific mood or emotion.
+2. Analogous Palette
+Analogous Palette is a type of color palette which includes colors that are adjacent to each other on the color wheel. Analogous Palette is useful since the colors on Analogous 
+Palette create a natural and harmonious blend. This is specially useful for designs where we want a sense of warmth and comfort.
+3. Complementary Palette
+Complementary Palette is a type of color palette that consists of colors that are opposite to each other on the color wheel, 
+for example - red and green or blue and orange. Complementary Palette are useful since the complementary colors create high contrast and vibrancy.
+4. Tetradic Palette
+Tetradic Palette is a type of color palette which consists of four colors that are evenly spaced on the color wheel. Tetradic Palette is useful for creating a visually rich and complex color scheme. 
+
+-Strategic themes are portfolio-level business objectives that provide competitive differentiation and strategic advantage. They provide business context for portfolio strategy 
+and decision-making, representing aspects of the enterprise’s strategic intent. Strategic Themes are a vital tool for communicating critical business objectives to Agile Teams and ARTs, 
+aligning their purpose with the purpose of the broader enterprise. They provide much of the organizational clarity that fuels effective decentralized decision-making and ensure that Value 
+Streams are driven by measurable business outcomes.
+A theme strategy is a structured approach to defining and managing visual styles (colors, typography, spacing, etc.) across an application, so that different themes (like light, dark, or brand 
+variations) can be applied consistently and dynamically.
+example:
+const theme = {
+  colors: {
+    background: "#121212",
+    text: "#ffffff",
+    primary: "#bb86fc"
+  }
+};
+
+
+5.UI design system (components + tokens):-
+//App.js
+import Button from "./components/Button";
+import Input from "./components/Input";
+import Card from "./components/Card";
+
+const App = () => {
+  return (
+    <div style={{ padding: "20px" }}>
+      <h1>UI Design System</h1>
+
+      <Button>Primary Button</Button>
+      <Button variant="secondary">Secondary Button</Button>
+
+      <br />
+      <br />
+
+      <Input placeholder="Enter text..." />
+
+      <br />
+      <br />
+
+      <Card title="Card Title">This is reusable card component.</Card>
+    </div>
+  );
+};
+
+export default App
+
+//index.js
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./styles/global.css";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+//index.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Design System</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/index.js"></script>
+  </body>
+</html>
+
+//vite.config.js
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()]
+});
+
+//tokens/colors.js
+export const colors = {
+  primary: "#4F46E5",
+  secondary: "#06B6D4",
+  success: "#10B981",
+  danger: "#EF4444",
+  background: "#FFFFFF",
+  text: "#111827"
+};
+
+//tokens/spacing.js
+export const spacing = {
+  xs: "4px",
+  sm: "8px",
+  md: "16px",
+  lg: "24px",
+  xl: "32px"
+};
+
+//tokens/typography.js
+export const typography = {
+  fontFamily: "Arial, sans-serif",
+  fontSize: {
+    sm: "12px",
+    md: "16px",
+    lg: "20px",
+    xl: "24px"
+  },
+  fontWeight: {
+    normal: 400,
+    bold: 600
+  }
+};
+
+//theme/lightTheme.js
+import { colors } from "../tokens/colors";
+
+export const lightTheme = {
+  background: colors.background,
+  text: colors.text,
+  primary: colors.primary
+};
+
+//theme/darkTheme.js
+export const darkTheme = {
+  background: "#111827",
+  text: "#ffffff",
+  primary: "#818CF8"
+};
+
+//styles/global.css
+:root {
+  --primary: #4F46E5;
+  --secondary: #06B6D4;
+  --radius: 8px;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+//components/Button/Button.jsx
+import "./Button.css";
+
+const Button = ({ children, variant = "primary" }) => {
+  return <button className={`btn ${variant}`}>{children}</button>;
+};
+
+export default Button;
+
+//components/Button/Button.css
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: white;
+}
+
+.primary {
+  background: var(--primary);
+}
+
+.secondary {
+  background: var(--secondary);
+}
+
+//components/Button/index.js
+export { default } from "./Button";
+
+//components/Input/Input.jsx
+import "./Input.css";
+
+const Input = ({ placeholder }) => {
+  return <input className="input" placeholder={placeholder} />;
+};
+
+export default Input;
+
+//components/Input/Input.css
+.input {
+  padding: 10px;
+  border-radius: var(--radius);
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+//components/Input/index.js
+export { default } from "./Input";
+
+//components/Card/Card.jsx
+import "./Card.css";
+
+const Card = ({ title, children }) => {
+  return (
+    <div className="card">
+      <h3>{title}</h3>
+      <p>{children}</p>
+    </div>
+  );
+};
+
+export default Card;
+
+//components/Card/Card.css
+.card {
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: white;
+}
+
+//components/Card/index.js
+export { default } from "./Card";
+
+
+6.Implement reusable table, form, button, modal:-
+//App.js
+import { useState } from "react";
+import Button from "./components/Button/Button";
+import Table from "./components/Table/Table";
+import Form from "./components/Form/Form";
+import Modal from "./components/Modal/Modal";
+
+const App = () => {
+  const [open, setOpen] = useState(false);
+
+  const columns = [
+    { header: "Name", accessor: "name" },
+    { header: "Age", accessor: "age" }
+  ];
+
+  const data = [
+    { name: "Gayatri", age: 22 },
+    { name: "Rahul", age: 25 }
+  ];
+
+  const fields = [
+    { name: "name", label: "Name", type: "text", placeholder: "Enter name" },
+    { name: "email", label: "Email", type: "email", placeholder: "Enter email" }
+  ];
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h2>Reusable Components</h2>
+
+      <Button onClick={() => setOpen(true)}>Open Modal</Button>
+
+      <br /><br />
+
+      <Table columns={columns} data={data} />
+
+      <br /><br />
+
+      <Form fields={fields} onSubmit={(data) => console.log(data)} />
+
+      <Modal isOpen={open} onClose={() => setOpen(false)}>
+        <h3>Modal Content</h3>
+        <p>This is reusable modal</p>
+      </Modal>
+    </div>
+  );
+};
+
+export default App;
+
+//components/Button/Button.jsx
+import "./Button.css";
+
+const Button = ({ children, variant = "primary", onClick }) => {
+  return (
+    <button className={`btn ${variant}`} onClick={onClick}>
+      {children}
+    </button>
+  );
+};
+
+export default Button;
+
+//components/Button/Button.css
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+}
+
+.primary {
+  background: #4F46E5;
+}
+
+.secondary {
+  background: #06B6D4;
+}
+
+//components/Table/Table.jsx
+import "./Table.css";
+
+const Table = ({ columns, data }) => {
+  return (
+    <table className="table">
+      <thead>
+        <tr>
+          {columns.map((col, index) => (
+            <th key={index}>{col.header}</th>
+          ))}
+        </tr>
+      </thead>
+
+      <tbody>
+        {data.map((row, i) => (
+          <tr key={i}>
+            {columns.map((col, j) => (
+              <td key={j}>{row[col.accessor]}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+export default Table;
+
+//components/Table/Table.css
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.table th {
+  background: #f5f5f5;
+}
+
+//components/Form/Form.jsx
+import { useState } from "react";
+import Button from "../Button/Button";
+import "./Form.css";
+
+const Form = ({ fields, onSubmit }) => {
+  const [formData, setFormData] = useState({});
+
+  const handleChange = (e, name) => {
+    setFormData({ ...formData, [name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
+  return (
+    <form className="form" onSubmit={handleSubmit}>
+      {fields.map((field, index) => (
+        <div key={index} className="form-group">
+          <label>{field.label}</label>
+          <input
+            type={field.type}
+            placeholder={field.placeholder}
+            onChange={(e) => handleChange(e, field.name)}
+          />
+        </div>
+      ))}
+
+      <Button>Submit</Button>
+    </form>
+  );
+};
+
+export default Form;
+
+//components/Form/Form.css
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+//components/Modal/Modal.jsx
+import "./Modal.css";
+
+const Modal = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal">
+        <button className="close-btn" onClick={onClose}>
+          X
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+export default Modal;
+
+//components/Modal/Modal.css
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  width: 300px;
+  margin: 100px auto;
+  border-radius: 10px;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+
